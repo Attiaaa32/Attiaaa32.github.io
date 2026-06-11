@@ -3,152 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coach Attia - Fit & Nutrition</title>
+    <title>Coach Attia</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .hero-bg { background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(17,24,39,1) 100%); }
         .admin-modal { display: none; }
         .admin-modal.active { display: flex; }
     </style>
 </head>
-<body class="bg-gray-900 text-white font-sans">
+<body class="bg-gray-900 text-white">
 
-    <script>
-        const SUPABASE_URL = "https://wbsqjrmcdslvzvbvksmc.supabase.co"; 
-        const SUPABASE_KEY = "sb_publishable_-9ZJjDZTM6ZK1x5GmcyuLw_tE3Cussy"; 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    </script>
-
-    <nav class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center px-4">
-            <div class="flex items-center space-x-3 space-x-reverse">
-                <img src="logo.jpg" alt="Logo" class="w-12 h-12 rounded-full border-2 border-red-600">
-                <span class="text-xl font-bold tracking-wider text-red-500">ATTIA FITNESS</span>
-            </div>
-            <div class="flex items-center space-x-6 space-x-reverse">
-                <a href="#about" class="hover:text-red-500 transition">عني</a>
-                <a href="#transformations" class="hover:text-red-500 transition">التحولات</a>
-                <a href="#prices" class="hover:text-red-500 transition">الأسعار</a>
-                <button onclick="toggleAdminModal()" class="text-gray-400 hover:text-white"><i class="fas fa-lock"></i></button>
-            </div>
-        </div>
+    <nav class="bg-gray-900 p-4 border-b border-gray-800 flex justify-between items-center">
+        <span class="text-xl font-bold">ATTIA FITNESS</span>
+        <button onclick="toggleAdminModal()" class="text-white text-xl"><i class="fas fa-lock"></i></button>
     </nav>
 
-    <section class="relative h-screen flex items-center justify-center hero-bg overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img id="hero-img-display" src="logo.jpg" alt="Coach Attia" class="w-full h-full object-cover opacity-40">
-        </div>
-        <div class="relative z-10 text-center px-4 max-w-3xl">
-            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6">كوتش <span class="text-red-500">أحمد عطية</span></h1>
-            <p class="text-xl md:text-2xl text-gray-300 mb-8 font-medium">ابدأ رحلة تحولك اليوم مع نظام تدريب وتغذية مصمم خصيصاً لجسمك.</p>
-            <a href="https://wa.me/201XXXXXXXXX" target="_blank" class="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300">
-                احجز مكانك الآن <i class="fab fa-whatsapp mr-2"></i>
-            </a>
-        </div>
-    </section>
-
-    <section id="transformations" class="py-20 bg-gray-900 px-4">
-        <div class="container mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-16"><span class="text-red-500">//</span> أبطال كوتش عطية</h2>
-            <div id="transformations-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                </div>
-        </div>
-    </section>
-
-    <section id="prices" class="py-20 bg-gray-800 px-4">
-        <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-16"><span class="text-red-500">//</span> باقات الاشتراك</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-gray-900 p-8 rounded-2xl border border-gray-700 text-center">
-                    <h3 class="text-2xl font-bold mb-4 text-red-500">Nutrition Plan</h3>
-                    <div id="nutrition-price-display" class="text-4xl font-extrabold mb-8 text-white">...</div>
- </div>
-                <div class="bg-gray-900 p-8 rounded-2xl border-2 border-red-600 text-center">
-                    <h3 class="text-2xl font-bold mb-4 text-white">Full Online Coaching</h3>
-                    <div id="coaching-price-display" class="text-4xl font-extrabold mb-8 text-white">...</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="admin-modal" class="admin-modal fixed inset-0 bg-black bg-opacity-80 z-50 items-center justify-center p-4">
-        <div class="bg-gray-800 w-full max-w-2xl p-6 rounded-2xl shadow-2xl">
-            <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
-                <h3 class="text-2xl font-bold text-red-500">لوحة تحكم الكوتش</h3>
-                <button onclick="toggleAdminModal()" class="text-gray-400 hover:text-white text-xl">&times;</button>
-            </div>
-            
-            <div id="admin-login-form">
-                <label class="block text-sm mb-2 text-gray-300">الرقم السري</label>
-                <input type="password" id="admin-password" class="w-full p-3 bg-gray-900 rounded-xl mb-4 border border-gray-700">
-                <button onclick="loginAdmin()" class="w-full bg-red-600 py-3 rounded-xl">دخول</button>
-            </div>
-
-            <div id="admin-controls" class="hidden space-y-6">
-                <div>
-                    <label class="block text-xs text-gray-400 mb-1">سعر الـ Nutrition Plan</label>
-                    <input type="text" id="input-nutrition-price" class="w-full p-2 bg-gray-900 rounded-lg mb-2">
-                    <label class="block text-xs text-gray-400 mb-1">سعر الـ Online Coaching</label>
-                    <input type="text" id="input-coaching-price" class="w-full p-2 bg-gray-900 rounded-lg mb-4">
-                    <button onclick="updatePricesAndHero()" class="w-full bg-green-600 py-2 rounded-xl">حفظ الأسعار</button>
-                </div>
-                <hr class="border-gray-700">
-                <div>
-                    <label class="block text-xs text-gray-400 mb-1">رفع صورة بطل جديد</label>
-                    <input type="text" id="transformation-title" placeholder="اسم البطل" class="w-full p-2 bg-gray-900 rounded-lg mb-2">
-                    <input type="file" id="transformation-file" class="w-full p-2 bg-gray-900 rounded-lg mb-2">
-                    <button onclick="uploadTransformation()" class="w-full bg-red-600 py-2 rounded-xl">رفع صورة البطل</button>
-                </div>
-            </div>
+    <div id="admin-modal" class="admin-modal fixed inset-0 bg-black bg-opacity-90 z-50 items-center justify-center p-4">
+        <div class="bg-gray-800 p-6 rounded-xl w-full max-w-md">
+            <h2 class="text-white mb-4">لوحة التحكم</h2>
+            <input type="password" id="admin-password" placeholder="الباسورد" class="w-full p-2 mb-4 bg-gray-900 rounded">
+            <button onclick="loginAdmin()" class="w-full bg-red-600 p-2 rounded">دخول</button>
+            <button onclick="toggleAdminModal()" class="w-full mt-2 text-gray-400">إغلاق</button>
         </div>
     </div>
 
     <script>
-        function toggleAdminModal() { document.getElementById('admin-modal').classList.toggle('active'); }
+        const SUPABASE_URL = "https://wbsqjrmcdslvzvbvksmc.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_9ZJjDZTM6ZK1x5GmcyuLw_tE3Cussy"; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        function toggleAdminModal() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('active');
+        }
+
         function loginAdmin() {
-            if(document.getElementById('admin-password').value === '1920') { 
-                document.getElementById('admin-login-form').classList.add('hidden');
-                document.getElementById('admin-controls').classList.remove('hidden');
-            } else { Swal.fire('خطأ', 'الباسورد غلط يا كوتش!', 'error'); }
+            const pass = document.getElementById('admin-password').value;
+            if(pass === '1920') {
+                Swal.fire('أهلاً كوتش!', 'تم الدخول بنجاح', 'success');
+                toggleAdminModal();
+            } else {
+                Swal.fire('خطأ', 'باسورد غلط', 'error');
+            }
         }
-
-        async function loadSiteData() {
-            const { data: siteData } = await _supabase.from('site_data').select('*');
-            siteData?.forEach(item => {
-                if(item.id === 'nutrition_price') document.getElementById('nutrition-price-display').innerText = item.content;
-                if(item.id === 'coaching_price') document.getElementById('coaching-price-display').innerText = item.content;
-            });
-            const { data: transformData } = await _supabase.from('client_transformations').select('*');
-            const container = document.getElementById('transformations-container');
-            container.innerHTML = transformData?.map(item => 
-                <div class="bg-gray-800 rounded-2xl overflow-hidden border border-gray-700">
-                    <img src="${item.image_url}" class="w-full h-80 object-cover">
-                    <div class="p-4 text-center"><h3 class="text-xl font-bold">${item.title}</h3></div>
-                </div>
-            ).join('') || '';
-        }
-async function updatePricesAndHero() {
-            const nutPrice = document.getElementById('input-nutrition-price').value;
-            const coachPrice = document.getElementById('input-coaching-price').value;
-            await _supabase.from('site_data').update({ content: nutPrice }).eq('id', 'nutrition_price');
-            await _supabase.from('site_data').update({ content: coachPrice }).eq('id', 'coaching_price');
-            Swal.fire('تم!', 'الأسعار اتحدثت', 'success');
-            loadSiteData();
-        }
-
-        async function uploadTransformation() {
-            const title = document.getElementById('transformation-title').value;
-            const file = document.getElementById('transformation-file').files[0];
-            const { data: uploadData } = await _supabase.storage.from('transformations').upload(tr_${Date.now()}, file);
-            const { data: urlData } = _supabase.storage.from('transformations').getPublicUrl(tr_${Date.now()});
-            await _supabase.from('client_transformations').insert([{ title: title, image_url: urlData.publicUrl }]);
-            Swal.fire('عاش!', 'البطل نزل الموقع', 'success');
-            loadSiteData();
-        }
-        window.onload = loadSiteData;
     </script>
 </body>
 </html>
