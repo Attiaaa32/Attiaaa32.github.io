@@ -2,52 +2,49 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coach Attia</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .admin-modal { display: none; }
-        .admin-modal.active { display: flex; }
-    </style>
 </head>
-<body class="bg-gray-900 text-white">
-
-    <nav class="bg-gray-900 p-4 border-b border-gray-800 flex justify-between items-center">
-        <span class="text-xl font-bold">ATTIA FITNESS</span>
-        <button onclick="toggleAdminModal()" class="text-white text-xl"><i class="fas fa-lock"></i></button>
+<body class="bg-gray-900 text-white p-4">
+    <nav class="flex justify-between items-center mb-10">
+        <h1 class="text-2xl font-bold text-red-500">ATTIA FITNESS</h1>
+        <button onclick="document.getElementById('admin-modal').classList.remove('hidden')" class="bg-gray-700 p-2 rounded">🔐</button>
     </nav>
 
-    <div id="admin-modal" class="admin-modal fixed inset-0 bg-black bg-opacity-90 z-50 items-center justify-center p-4">
-        <div class="bg-gray-800 p-6 rounded-xl w-full max-w-md">
-            <h2 class="text-white mb-4">لوحة التحكم</h2>
-            <input type="password" id="admin-password" placeholder="الباسورد" class="w-full p-2 mb-4 bg-gray-900 rounded">
-            <button onclick="loginAdmin()" class="w-full bg-red-600 p-2 rounded">دخول</button>
-            <button onclick="toggleAdminModal()" class="w-full mt-2 text-gray-400">إغلاق</button>
+    <div id="content" class="text-center">
+        <h2 id="nutrition-price" class="text-xl">جاري التحميل...</h2>
+        <div id="transformations-grid" class="grid grid-cols-1 gap-4 mt-10"></div>
+    </div>
+
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4">
+        <div class="bg-gray-800 p-6 rounded w-full max-w-sm">
+            <input type="password" id="pass" placeholder="الباسورد" class="w-full p-2 mb-2 bg-gray-900 text-white rounded">
+            <button onclick="login()" class="w-full bg-red-600 p-2 rounded mb-2">دخول</button>
+            <button onclick="document.getElementById('admin-modal').classList.add('hidden')" class="w-full bg-gray-600 p-2 rounded">إغلاق</button>
         </div>
     </div>
 
     <script>
-        const SUPABASE_URL = "https://wbsqjrmcdslvzvbvksmc.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_9ZJjDZTM6ZK1x5GmcyuLw_tE3Cussy"; 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        function toggleAdminModal() {
-            const modal = document.getElementById('admin-modal');
-            modal.classList.toggle('active');
+        const supabase = supabase.createClient("https://wbsqjrmcdslvzvbvksmc.supabase.co", "sb_publishable_9ZJjDZTM6ZK1x5GmcyuLw_tE3Cussy");
+        
+        async function loadData() {
+            const { data } = await supabase.from('site_data').select('*');
+            if(data) document.getElementById('nutrition-price').innerText = "سعر النظام: " + data[0].content;
+            
+            const { data: trans } = await supabase.from('client_transformations').select('*');
+            const grid = document.getElementById('transformations-grid');
+            if(trans) grid.innerHTML = trans.map(t => <img src="${t.image_url}" class="w-full rounded">).join('');
         }
 
-        function loginAdmin() {
-            const pass = document.getElementById('admin-password').value;
-            if(pass === '1920') {
-                Swal.fire('أهلاً كوتش!', 'تم الدخول بنجاح', 'success');
-                toggleAdminModal();
-            } else {
-                Swal.fire('خطأ', 'باسورد غلط', 'error');
-            }
+        function login() {
+            if(document.getElementById('pass').value === '1920') {
+                Swal.fire('تم الدخول', 'تقدر دلوقتي تضيف بياناتك من قاعدة البيانات', 'success');
+                document.getElementById('admin-modal').classList.add('hidden');
+            } else { Swal.fire('خطأ', 'الباسورد غلط', 'error'); }
         }
+        loadData();
     </script>
 </body>
 </html>
